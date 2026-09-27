@@ -41,6 +41,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-zinc-50">
+
+      
+
       {/* Hero */}
       <div className="bg-zinc-900 text-white py-16 px-4 text-center">
         <h1 className="text-4xl font-bold tracking-tight mb-2">LaoWu Takeout</h1>
@@ -73,6 +76,33 @@ export default function Home() {
             </div>
           </div>
         ))}
+      </div>
+      {/* About Me */}
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="flex flex-col sm:flex-row items-center gap-8">
+          <div className="relative w-full sm:w-72 h-72 flex-shrink-0 rounded-2xl overflow-hidden bg-zinc-200">
+            <Image
+              src="/images/about-me.jpg"
+              alt="Cooking in the kitchen"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Why I'm Doing This</h2>
+            <p className="text-zinc-600 leading-relaxed">
+              I've worked both sides of the restaurant industry — fast food and higher-end
+              kitchens — and I've seen how the sausage actually gets made. Literally, in some
+              cases. I still remember watching a manager upcharge customers $1.99 for a tiny tray
+              of sauce that cost pennies, and thinking: this is what people are paying for?
+              <br /><br />
+              That stuck with me. I wanted to do the opposite — every dish here is made the way
+              I'd cook for my own family: slow, honest, no shortcuts, no upcharges hidden in the
+              fine print. Traditional recipes, cooked fresh for your order, not sitting around
+              waiting for one.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Sticky checkout bar */}
