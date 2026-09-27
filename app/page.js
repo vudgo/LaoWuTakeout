@@ -6,9 +6,9 @@ import Image from "next/image";
 const MENU = [
   { id: 1, name: "Miso Soup", price: 3.80, image: "/images/miso.jpg", desc: "Light, savory, made fresh to order." },
   { id: 2, name: "Corn Rice", price: 2.80, image: "/images/corn-rice.jpg", desc: "Slow-cooked rice with sweet corn." },
-  { id: 3, name: "Egg Fried Rice", price: 9.80, image: "/images/egg-fried-rice.jpg", desc: "Classic wok-fried rice, savory and fragrant." },
-  { id: 4, name: "Chicken Wings", price: 20.80, image: "/images/wings.jpg", desc: "Crispy skin, juicy inside, house marinade." },
-  { id: 5, name: "Braised Pork Belly", price: 25.80, image: "/images/pork-belly.jpg", desc: "Slow-braised low and slow for maximum depth of flavor." },
+  { id: 3, name: "Egg Fried Rice", price: 10.80, image: "/images/egg-fried-rice.jpg", desc: "Classic wok-fried rice, savory and fragrant." },
+  { id: 4, name: "Chicken Wings", price: 21.80, image: "/images/wings.jpg", desc: "Crispy skin, juicy inside, house marinade." },
+  { id: 5, name: "Braised Pork Belly", price: 26.80, image: "/images/pork-belly.jpg", desc: "Slow-braised low and slow for maximum depth of flavor." },
   { id: 6, name: "NY Strip Steak", price: 28.80, image: "/images/steak.jpg", desc: "Pan-seared to order, simple and clean." },
   { id: 7, name: "House Sour Plum Drink", price: 5.80, image: "/images/drink.jpg", desc: "Traditional homemade 酸梅汤, cools the palate." },
 ];
