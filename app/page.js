@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 const MENU = [
-  { id: 1, name: "Kung Pao Chicken", price: 12.99 },
-  { id: 2, name: "Beef Chow Mein", price: 13.99 },
-  { id: 3, name: "Vegetable Fried Rice", price: 10.99 },
-  { id: 4, name: "Spring Rolls (4pc)", price: 6.99 },
+  { id: 1, name: "Miso Soup", price: 3.80, image: "/images/miso.jpg", desc: "Light, savory, made fresh to order." },
+  { id: 2, name: "Corn Rice", price: 2.80, image: "/images/corn-rice.jpg", desc: "Slow-cooked rice with sweet corn." },
+  { id: 3, name: "Egg Fried Rice", price: 9.80, image: "/images/egg-fried-rice.jpg", desc: "Classic wok-fried rice, savory and fragrant." },
+  { id: 4, name: "Chicken Wings", price: 20.80, image: "/images/wings.jpg", desc: "Crispy skin, juicy inside, house marinade." },
+  { id: 5, name: "Braised Pork Belly", price: 25.80, image: "/images/pork-belly.jpg", desc: "Slow-braised low and slow for maximum depth of flavor." },
+  { id: 6, name: "NY Strip Steak", price: 28.80, image: "/images/steak.jpg", desc: "Pan-seared to order, simple and clean." },
+  { id: 7, name: "House Sour Plum Drink", price: 5.80, image: "/images/drink.jpg", desc: "Traditional homemade 酸梅汤, cools the palate." },
 ];
 
 export default function Home() {
@@ -17,68 +21,72 @@ export default function Home() {
     setCart((prev) => ({ ...prev, [id]: Math.max(0, qty) }));
   }
 
-  const total = MENU.reduce((sum, item) => {
-    return sum + (cart[item.id] || 0) * item.price;
-  }, 0);
-
+  const total = MENU.reduce((sum, item) => sum + (cart[item.id] || 0) * item.price, 0);
   const hasItems = total > 0;
 
   async function handleCheckout() {
     setLoading(true);
-
     const items = MENU
       .filter((item) => (cart[item.id] || 0) > 0)
-      .map((item) => ({
-        name: item.name,
-        price: item.price,
-        quantity: cart[item.id],
-      }));
+      .map((item) => ({ name: item.name, price: item.price, quantity: cart[item.id] }));
 
     const res = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ items }),
     });
-
     const data = await res.json();
     window.location.href = data.url;
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 py-12 px-4">
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow p-6">
-        <h1 className="text-2xl font-bold text-center mb-6">LaoWu Takeout</h1>
+    <div className="min-h-screen bg-zinc-50">
+      {/* Hero */}
+      <div className="bg-zinc-900 text-white py-16 px-4 text-center">
+        <h1 className="text-4xl font-bold tracking-tight mb-2">LaoWu Takeout</h1>
+        <p className="text-zinc-300 text-lg">Homemade. Slow-cooked. Delivered fresh.</p>
+      </div>
 
-        <div className="flex flex-col gap-4">
-          {MENU.map((item) => (
-            <div key={item.id} className="flex items-center justify-between border-b pb-3">
-              <div>
-                <p className="font-medium">{item.name}</p>
-                <p className="text-sm text-zinc-500">${item.price.toFixed(2)}</p>
-              </div>
-              <input
-                type="number"
-                min="0"
-                value={cart[item.id] || 0}
-                onChange={(e) => updateQty(item.id, parseInt(e.target.value) || 0)}
-                className="w-16 border rounded px-2 py-1 text-center"
-              />
+      {/* Menu grid */}
+      <div className="max-w-5xl mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {MENU.map((item) => (
+          <div key={item.id} className="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+            <div className="relative w-full h-48 bg-zinc-200">
+              <Image src={item.image} alt={item.name} fill className="object-cover" />
             </div>
-          ))}
-        </div>
+            <div className="p-4">
+              <div className="flex justify-between items-start mb-1">
+                <h3 className="font-semibold text-lg">{item.name}</h3>
+                <span className="font-semibold text-zinc-900">${item.price.toFixed(2)}</span>
+              </div>
+              <p className="text-sm text-zinc-500 mb-3">{item.desc}</p>
+              <div className="flex items-center justify-between">
+                <label className="text-sm text-zinc-500">Qty</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={cart[item.id] || 0}
+                  onChange={(e) => updateQty(item.id, parseInt(e.target.value) || 0)}
+                  className="w-16 border rounded-lg px-2 py-1 text-center"
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
 
-        <div className="mt-6 flex justify-between font-semibold text-lg">
-          <span>Total</span>
-          <span>${total.toFixed(2)}</span>
+      {/* Sticky checkout bar */}
+      <div className="sticky bottom-0 bg-white border-t shadow-lg px-4 py-4">
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
+          <span className="text-lg font-semibold">Total: ${total.toFixed(2)}</span>
+          <button
+            onClick={handleCheckout}
+            disabled={!hasItems || loading}
+            className="bg-black text-white px-8 py-3 rounded-full font-medium disabled:bg-zinc-300 disabled:cursor-not-allowed"
+          >
+            {loading ? "Loading..." : "Checkout"}
+          </button>
         </div>
-
-        <button
-          onClick={handleCheckout}
-          disabled={!hasItems || loading}
-          className="mt-4 w-full bg-black text-white py-3 rounded-lg font-medium disabled:bg-zinc-300 disabled:cursor-not-allowed"
-        >
-          {loading ? "Loading..." : "Checkout"}
-        </button>
       </div>
     </div>
   );
