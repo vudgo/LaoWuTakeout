@@ -11,6 +11,7 @@ const MENU = [
 
 export default function Home() {
   const [cart, setCart] = useState({});
+  const [loading, setLoading] = useState(false);
 
   function updateQty(id, qty) {
     setCart((prev) => ({ ...prev, [id]: Math.max(0, qty) }));
@@ -21,6 +22,27 @@ export default function Home() {
   }, 0);
 
   const hasItems = total > 0;
+
+  async function handleCheckout() {
+    setLoading(true);
+
+    const items = MENU
+      .filter((item) => (cart[item.id] || 0) > 0)
+      .map((item) => ({
+        name: item.name,
+        price: item.price,
+        quantity: cart[item.id],
+      }));
+
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items }),
+    });
+
+    const data = await res.json();
+    window.location.href = data.url;
+  }
 
   return (
     <div className="min-h-screen bg-zinc-50 py-12 px-4">
@@ -51,10 +73,11 @@ export default function Home() {
         </div>
 
         <button
-          disabled={!hasItems}
+          onClick={handleCheckout}
+          disabled={!hasItems || loading}
           className="mt-4 w-full bg-black text-white py-3 rounded-lg font-medium disabled:bg-zinc-300 disabled:cursor-not-allowed"
         >
-          Checkout
+          {loading ? "Loading..." : "Checkout"}
         </button>
       </div>
     </div>
